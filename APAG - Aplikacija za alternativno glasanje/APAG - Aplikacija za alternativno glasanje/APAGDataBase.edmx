@@ -1,0 +1,553 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Administrator">
+          <Key>
+            <PropertyRef Name="ID_administrator" />
+          </Key>
+          <Property Name="ID_administrator" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Tip korisnikaID_tipa" Type="int" Nullable="false" />
+          <Property Name="Korisnicko_ime" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Lozinka" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Glas">
+          <Key>
+            <PropertyRef Name="ID_glasa" />
+          </Key>
+          <Property Name="ID_glasa" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Vrijeme" Type="time" Precision="7" Nullable="false" />
+          <Property Name="Datum" Type="date" Nullable="false" />
+          <Property Name="GlasanjeID_glasanja" Type="int" Nullable="false" />
+          <Property Name="KandidatGlasanjaID_glasanja" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Glasac">
+          <Key>
+            <PropertyRef Name="ID_glasac" />
+          </Key>
+          <Property Name="ID_glasac" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Tip korisnikaID_tipa2" Type="int" Nullable="false" />
+          <Property Name="OIB" Type="varchar" MaxLength="50" />
+          <Property Name="Korsinicko_ime" Type="varchar" MaxLength="50" />
+          <Property Name="Lozinka" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Broj_osobne_iskaznice" Type="varchar" MaxLength="50" />
+          <Property Name="Ime" Type="varchar" MaxLength="50" />
+          <Property Name="Prezime" Type="varchar" MaxLength="50" />
+          <Property Name="Glasao" Type="bit" Nullable="false" />
+          <Property Name="ID_glasanja" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Glasanje">
+          <Key>
+            <PropertyRef Name="ID_glasanja" />
+          </Key>
+          <Property Name="ID_glasanja" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Naziv" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AdministratorID_administrator" Type="int" Nullable="false" />
+          <Property Name="Datum" Type="date" Nullable="false" />
+          <Property Name="KorisnickoImeOdabir" Type="bit" />
+          <Property Name="OIBOdabir" Type="bit" />
+          <Property Name="BrojOsobneIskazniceOdabir" Type="bit" />
+          <Property Name="ImeOdabir" Type="bit" />
+          <Property Name="PrezimeOdabir" Type="bit" />
+          <Property Name="Pobjednik" Type="varchar" MaxLength="50" />
+          <Property Name="Završeno" Type="bit" Nullable="false" />
+          <Property Name="VrijemePocetka" Type="time" Precision="7" Nullable="false" />
+          <Property Name="VrijemeZavrsetka" Type="time" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Kandidat">
+          <Key>
+            <PropertyRef Name="ID_kandidata" />
+            <PropertyRef Name="GlasanjeID_glasanja" />
+          </Key>
+          <Property Name="ID_kandidata" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GlasanjeID_glasanja" Type="int" Nullable="false" />
+          <Property Name="Ime" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Prezime" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Naziv" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DodatnaPoruka" Type="varchar(max)" Nullable="false" />
+          <Property Name="Slika" Type="image" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view '18007_DB.dbo.Kandidat_Glas' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Kandidat_Glas">
+          <Key>
+            <PropertyRef Name="KandidatID_Kandidata" />
+            <PropertyRef Name="KandidatGlasanjeID_glasanja" />
+            <PropertyRef Name="GlasID_glasa" />
+          </Key>
+          <Property Name="KandidatID_Kandidata" Type="int" Nullable="false" />
+          <Property Name="KandidatGlasanjeID_glasanja" Type="int" Nullable="false" />
+          <Property Name="GlasID_glasa" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="TipKorisnika">
+          <Key>
+            <PropertyRef Name="ID_tipa" />
+          </Key>
+          <Property Name="ID_tipa" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Naziv" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Glasac_Glasanje">
+          <End Role="Glasanje" Type="Self.Glasanje" Multiplicity="1" />
+          <End Role="Glasac" Type="Self.Glasac" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Glasanje">
+              <PropertyRef Name="ID_glasanja" />
+            </Principal>
+            <Dependent Role="Glasac">
+              <PropertyRef Name="ID_glasanja" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Kandidat_Glas_Glas">
+          <End Role="Glas" Type="Self.Glas" Multiplicity="1" />
+          <End Role="Kandidat_Glas" Type="Self.Kandidat_Glas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Glas">
+              <PropertyRef Name="ID_glasa" />
+            </Principal>
+            <Dependent Role="Kandidat_Glas">
+              <PropertyRef Name="GlasID_glasa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Kandidat_Glas_Kandidat">
+          <End Role="Kandidat" Type="Self.Kandidat" Multiplicity="1" />
+          <End Role="Kandidat_Glas" Type="Self.Kandidat_Glas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kandidat">
+              <PropertyRef Name="ID_kandidata" />
+              <PropertyRef Name="GlasanjeID_glasanja" />
+            </Principal>
+            <Dependent Role="Kandidat_Glas">
+              <PropertyRef Name="KandidatID_Kandidata" />
+              <PropertyRef Name="KandidatGlasanjeID_glasanja" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tAdministrator_tTipKorisnika">
+          <End Role="TipKorisnika" Type="Self.TipKorisnika" Multiplicity="1" />
+          <End Role="Administrator" Type="Self.Administrator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipKorisnika">
+              <PropertyRef Name="ID_tipa" />
+            </Principal>
+            <Dependent Role="Administrator">
+              <PropertyRef Name="Tip korisnikaID_tipa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tGlasac_tTipKorisnika">
+          <End Role="TipKorisnika" Type="Self.TipKorisnika" Multiplicity="1" />
+          <End Role="Glasac" Type="Self.Glasac" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipKorisnika">
+              <PropertyRef Name="ID_tipa" />
+            </Principal>
+            <Dependent Role="Glasac">
+              <PropertyRef Name="Tip korisnikaID_tipa2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tGlasanje_tAdministrator">
+          <End Role="Administrator" Type="Self.Administrator" Multiplicity="1" />
+          <End Role="Glasanje" Type="Self.Glasanje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Administrator">
+              <PropertyRef Name="ID_administrator" />
+            </Principal>
+            <Dependent Role="Glasanje">
+              <PropertyRef Name="AdministratorID_administrator" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tKandidata_tGlasanje">
+          <End Role="Glasanje" Type="Self.Glasanje" Multiplicity="1" />
+          <End Role="Kandidat" Type="Self.Kandidat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Glasanje">
+              <PropertyRef Name="ID_glasanja" />
+            </Principal>
+            <Dependent Role="Kandidat">
+              <PropertyRef Name="GlasanjeID_glasanja" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBModelStoreContainer">
+          <EntitySet Name="Administrator" EntityType="Self.Administrator" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Glas" EntityType="Self.Glas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Glasac" EntityType="Self.Glasac" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Glasanje" EntityType="Self.Glasanje" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kandidat" EntityType="Self.Kandidat" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TipKorisnika" EntityType="Self.TipKorisnika" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kandidat_Glas" EntityType="Self.Kandidat_Glas" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Kandidat_Glas].[KandidatID_Kandidata] AS [KandidatID_Kandidata], 
+    [Kandidat_Glas].[KandidatGlasanjeID_glasanja] AS [KandidatGlasanjeID_glasanja], 
+    [Kandidat_Glas].[GlasID_glasa] AS [GlasID_glasa]
+    FROM [dbo].[Kandidat_Glas] AS [Kandidat_Glas]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Glasac_Glasanje" Association="Self.FK_Glasac_Glasanje">
+            <End Role="Glasanje" EntitySet="Glasanje" />
+            <End Role="Glasac" EntitySet="Glasac" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Kandidat_Glas_Glas" Association="Self.FK_Kandidat_Glas_Glas">
+            <End Role="Glas" EntitySet="Glas" />
+            <End Role="Kandidat_Glas" EntitySet="Kandidat_Glas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Kandidat_Glas_Kandidat" Association="Self.FK_Kandidat_Glas_Kandidat">
+            <End Role="Kandidat" EntitySet="Kandidat" />
+            <End Role="Kandidat_Glas" EntitySet="Kandidat_Glas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tAdministrator_tTipKorisnika" Association="Self.FK_tAdministrator_tTipKorisnika">
+            <End Role="TipKorisnika" EntitySet="TipKorisnika" />
+            <End Role="Administrator" EntitySet="Administrator" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tGlasac_tTipKorisnika" Association="Self.FK_tGlasac_tTipKorisnika">
+            <End Role="TipKorisnika" EntitySet="TipKorisnika" />
+            <End Role="Glasac" EntitySet="Glasac" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tGlasanje_tAdministrator" Association="Self.FK_tGlasanje_tAdministrator">
+            <End Role="Administrator" EntitySet="Administrator" />
+            <End Role="Glasanje" EntitySet="Glasanje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tKandidata_tGlasanje" Association="Self.FK_tKandidata_tGlasanje">
+            <End Role="Glasanje" EntitySet="Glasanje" />
+            <End Role="Kandidat" EntitySet="Kandidat" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Administrator">
+          <Key>
+            <PropertyRef Name="ID_administrator" />
+          </Key>
+          <Property Name="ID_administrator" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Tip_korisnikaID_tipa" Type="Int32" Nullable="false" />
+          <Property Name="Korisnicko_ime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Lozinka" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="TipKorisnika" Relationship="Self.FK_tAdministrator_tTipKorisnika" FromRole="Administrator" ToRole="TipKorisnika" />
+          <NavigationProperty Name="Glasanje" Relationship="Self.FK_tGlasanje_tAdministrator" FromRole="Administrator" ToRole="Glasanje" />
+        </EntityType>
+        <EntityType Name="Glas">
+          <Key>
+            <PropertyRef Name="ID_glasa" />
+          </Key>
+          <Property Name="ID_glasa" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Vrijeme" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="Datum" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="GlasanjeID_glasanja" Type="Int32" Nullable="false" />
+          <Property Name="KandidatGlasanjaID_glasanja" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Kandidat" Relationship="Self.Kandidat_Glas" FromRole="Glas" ToRole="Kandidat" />
+        </EntityType>
+        <EntityType Name="Glasac">
+          <Key>
+            <PropertyRef Name="ID_glasac" />
+          </Key>
+          <Property Name="ID_glasac" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Tip_korisnikaID_tipa2" Type="Int32" Nullable="false" />
+          <Property Name="OIB" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Korsinicko_ime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Lozinka" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Broj_osobne_iskaznice" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Ime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Prezime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Glasao" Type="Boolean" Nullable="false" />
+          <Property Name="ID_glasanja" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Glasanje" Relationship="Self.FK_Glasac_Glasanje" FromRole="Glasac" ToRole="Glasanje" />
+          <NavigationProperty Name="TipKorisnika" Relationship="Self.FK_tGlasac_tTipKorisnika" FromRole="Glasac" ToRole="TipKorisnika" />
+        </EntityType>
+        <EntityType Name="Glasanje">
+          <Key>
+            <PropertyRef Name="ID_glasanja" />
+          </Key>
+          <Property Name="ID_glasanja" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Naziv" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AdministratorID_administrator" Type="Int32" Nullable="false" />
+          <Property Name="Datum" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="KorisnickoImeOdabir" Type="Boolean" />
+          <Property Name="OIBOdabir" Type="Boolean" />
+          <Property Name="BrojOsobneIskazniceOdabir" Type="Boolean" />
+          <Property Name="ImeOdabir" Type="Boolean" />
+          <Property Name="PrezimeOdabir" Type="Boolean" />
+          <Property Name="Pobjednik" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Završeno" Type="Boolean" Nullable="false" />
+          <Property Name="VrijemePocetka" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="VrijemeZavrsetka" Type="Time" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Administrator" Relationship="Self.FK_tGlasanje_tAdministrator" FromRole="Glasanje" ToRole="Administrator" />
+          <NavigationProperty Name="Glasac" Relationship="Self.FK_Glasac_Glasanje" FromRole="Glasanje" ToRole="Glasac" />
+          <NavigationProperty Name="Kandidat" Relationship="Self.FK_tKandidata_tGlasanje" FromRole="Glasanje" ToRole="Kandidat" />
+        </EntityType>
+        <EntityType Name="Kandidat">
+          <Key>
+            <PropertyRef Name="ID_kandidata" />
+            <PropertyRef Name="GlasanjeID_glasanja" />
+          </Key>
+          <Property Name="ID_kandidata" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GlasanjeID_glasanja" Type="Int32" Nullable="false" />
+          <Property Name="Ime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Prezime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Naziv" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DodatnaPoruka" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Slika" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Glasanje" Relationship="Self.FK_tKandidata_tGlasanje" FromRole="Kandidat" ToRole="Glasanje" />
+          <NavigationProperty Name="Glas" Relationship="Self.Kandidat_Glas" FromRole="Kandidat" ToRole="Glas" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="TipKorisnika">
+          <Key>
+            <PropertyRef Name="ID_tipa" />
+          </Key>
+          <Property Name="ID_tipa" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Naziv" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Administrator" Relationship="Self.FK_tAdministrator_tTipKorisnika" FromRole="TipKorisnika" ToRole="Administrator" />
+          <NavigationProperty Name="Glasac" Relationship="Self.FK_tGlasac_tTipKorisnika" FromRole="TipKorisnika" ToRole="Glasac" />
+        </EntityType>
+        <Association Name="FK_tAdministrator_tTipKorisnika">
+          <End Role="TipKorisnika" Type="Self.TipKorisnika" Multiplicity="1" />
+          <End Role="Administrator" Type="Self.Administrator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipKorisnika">
+              <PropertyRef Name="ID_tipa" />
+            </Principal>
+            <Dependent Role="Administrator">
+              <PropertyRef Name="Tip_korisnikaID_tipa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tGlasanje_tAdministrator">
+          <End Role="Administrator" Type="Self.Administrator" Multiplicity="1" />
+          <End Role="Glasanje" Type="Self.Glasanje" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Administrator">
+              <PropertyRef Name="ID_administrator" />
+            </Principal>
+            <Dependent Role="Glasanje">
+              <PropertyRef Name="AdministratorID_administrator" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Glasac_Glasanje">
+          <End Role="Glasanje" Type="Self.Glasanje" Multiplicity="1" />
+          <End Role="Glasac" Type="Self.Glasac" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Glasanje">
+              <PropertyRef Name="ID_glasanja" />
+            </Principal>
+            <Dependent Role="Glasac">
+              <PropertyRef Name="ID_glasanja" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tGlasac_tTipKorisnika">
+          <End Role="TipKorisnika" Type="Self.TipKorisnika" Multiplicity="1" />
+          <End Role="Glasac" Type="Self.Glasac" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipKorisnika">
+              <PropertyRef Name="ID_tipa" />
+            </Principal>
+            <Dependent Role="Glasac">
+              <PropertyRef Name="Tip_korisnikaID_tipa2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tKandidata_tGlasanje">
+          <End Role="Glasanje" Type="Self.Glasanje" Multiplicity="1" />
+          <End Role="Kandidat" Type="Self.Kandidat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Glasanje">
+              <PropertyRef Name="ID_glasanja" />
+            </Principal>
+            <Dependent Role="Kandidat">
+              <PropertyRef Name="GlasanjeID_glasanja" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Kandidat_Glas">
+          <End Role="Glas" Type="Self.Glas" Multiplicity="*" />
+          <End Role="Kandidat" Type="Self.Kandidat" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="Entities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Administrator" EntityType="Self.Administrator" />
+          <EntitySet Name="Glas" EntityType="Self.Glas" />
+          <EntitySet Name="Glasac" EntityType="Self.Glasac" />
+          <EntitySet Name="Glasanje" EntityType="Self.Glasanje" />
+          <EntitySet Name="Kandidat" EntityType="Self.Kandidat" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="TipKorisnika" EntityType="Self.TipKorisnika" />
+          <AssociationSet Name="FK_tAdministrator_tTipKorisnika" Association="Self.FK_tAdministrator_tTipKorisnika">
+            <End Role="TipKorisnika" EntitySet="TipKorisnika" />
+            <End Role="Administrator" EntitySet="Administrator" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tGlasanje_tAdministrator" Association="Self.FK_tGlasanje_tAdministrator">
+            <End Role="Administrator" EntitySet="Administrator" />
+            <End Role="Glasanje" EntitySet="Glasanje" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Glasac_Glasanje" Association="Self.FK_Glasac_Glasanje">
+            <End Role="Glasanje" EntitySet="Glasanje" />
+            <End Role="Glasac" EntitySet="Glasac" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tGlasac_tTipKorisnika" Association="Self.FK_tGlasac_tTipKorisnika">
+            <End Role="TipKorisnika" EntitySet="TipKorisnika" />
+            <End Role="Glasac" EntitySet="Glasac" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tKandidata_tGlasanje" Association="Self.FK_tKandidata_tGlasanje">
+            <End Role="Glasanje" EntitySet="Glasanje" />
+            <End Role="Kandidat" EntitySet="Kandidat" />
+          </AssociationSet>
+          <AssociationSet Name="Kandidat_Glas" Association="Self.Kandidat_Glas">
+            <End Role="Glas" EntitySet="Glas" />
+            <End Role="Kandidat" EntitySet="Kandidat" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBModelStoreContainer" CdmEntityContainer="Entities2">
+          <EntitySetMapping Name="Administrator">
+            <EntityTypeMapping TypeName="DBModel.Administrator">
+              <MappingFragment StoreEntitySet="Administrator">
+                <ScalarProperty Name="ID_administrator" ColumnName="ID_administrator" />
+                <ScalarProperty Name="Tip_korisnikaID_tipa" ColumnName="Tip korisnikaID_tipa" />
+                <ScalarProperty Name="Korisnicko_ime" ColumnName="Korisnicko_ime" />
+                <ScalarProperty Name="Lozinka" ColumnName="Lozinka" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Glas">
+            <EntityTypeMapping TypeName="DBModel.Glas">
+              <MappingFragment StoreEntitySet="Glas">
+                <ScalarProperty Name="ID_glasa" ColumnName="ID_glasa" />
+                <ScalarProperty Name="Vrijeme" ColumnName="Vrijeme" />
+                <ScalarProperty Name="Datum" ColumnName="Datum" />
+                <ScalarProperty Name="GlasanjeID_glasanja" ColumnName="GlasanjeID_glasanja" />
+                <ScalarProperty Name="KandidatGlasanjaID_glasanja" ColumnName="KandidatGlasanjaID_glasanja" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Glasac">
+            <EntityTypeMapping TypeName="DBModel.Glasac">
+              <MappingFragment StoreEntitySet="Glasac">
+                <ScalarProperty Name="ID_glasac" ColumnName="ID_glasac" />
+                <ScalarProperty Name="Tip_korisnikaID_tipa2" ColumnName="Tip korisnikaID_tipa2" />
+                <ScalarProperty Name="OIB" ColumnName="OIB" />
+                <ScalarProperty Name="Korsinicko_ime" ColumnName="Korsinicko_ime" />
+                <ScalarProperty Name="Lozinka" ColumnName="Lozinka" />
+                <ScalarProperty Name="Broj_osobne_iskaznice" ColumnName="Broj_osobne_iskaznice" />
+                <ScalarProperty Name="Ime" ColumnName="Ime" />
+                <ScalarProperty Name="Prezime" ColumnName="Prezime" />
+                <ScalarProperty Name="Glasao" ColumnName="Glasao" />
+                <ScalarProperty Name="ID_glasanja" ColumnName="ID_glasanja" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Glasanje">
+            <EntityTypeMapping TypeName="DBModel.Glasanje">
+              <MappingFragment StoreEntitySet="Glasanje">
+                <ScalarProperty Name="ID_glasanja" ColumnName="ID_glasanja" />
+                <ScalarProperty Name="Naziv" ColumnName="Naziv" />
+                <ScalarProperty Name="AdministratorID_administrator" ColumnName="AdministratorID_administrator" />
+                <ScalarProperty Name="Datum" ColumnName="Datum" />
+                <ScalarProperty Name="KorisnickoImeOdabir" ColumnName="KorisnickoImeOdabir" />
+                <ScalarProperty Name="OIBOdabir" ColumnName="OIBOdabir" />
+                <ScalarProperty Name="BrojOsobneIskazniceOdabir" ColumnName="BrojOsobneIskazniceOdabir" />
+                <ScalarProperty Name="ImeOdabir" ColumnName="ImeOdabir" />
+                <ScalarProperty Name="PrezimeOdabir" ColumnName="PrezimeOdabir" />
+                <ScalarProperty Name="Pobjednik" ColumnName="Pobjednik" />
+                <ScalarProperty Name="Završeno" ColumnName="Završeno" />
+                <ScalarProperty Name="VrijemePocetka" ColumnName="VrijemePocetka" />
+                <ScalarProperty Name="VrijemeZavrsetka" ColumnName="VrijemeZavrsetka" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kandidat">
+            <EntityTypeMapping TypeName="DBModel.Kandidat">
+              <MappingFragment StoreEntitySet="Kandidat">
+                <ScalarProperty Name="ID_kandidata" ColumnName="ID_kandidata" />
+                <ScalarProperty Name="GlasanjeID_glasanja" ColumnName="GlasanjeID_glasanja" />
+                <ScalarProperty Name="Ime" ColumnName="Ime" />
+                <ScalarProperty Name="Prezime" ColumnName="Prezime" />
+                <ScalarProperty Name="Naziv" ColumnName="Naziv" />
+                <ScalarProperty Name="DodatnaPoruka" ColumnName="DodatnaPoruka" />
+                <ScalarProperty Name="Slika" ColumnName="Slika" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="DBModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipKorisnika">
+            <EntityTypeMapping TypeName="DBModel.TipKorisnika">
+              <MappingFragment StoreEntitySet="TipKorisnika">
+                <ScalarProperty Name="ID_tipa" ColumnName="ID_tipa" />
+                <ScalarProperty Name="Naziv" ColumnName="Naziv" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Kandidat_Glas" TypeName="DBModel.Kandidat_Glas" StoreEntitySet="Kandidat_Glas">
+            <EndProperty Name="Glas">
+              <ScalarProperty Name="ID_glasa" ColumnName="GlasID_glasa" />
+            </EndProperty>
+            <EndProperty Name="Kandidat">
+              <ScalarProperty Name="ID_kandidata" ColumnName="KandidatID_Kandidata" />
+              <ScalarProperty Name="GlasanjeID_glasanja" ColumnName="KandidatGlasanjeID_glasanja" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
